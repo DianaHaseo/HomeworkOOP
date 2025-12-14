@@ -43,5 +43,3 @@ def test_category2_contents(category2):
     assert category2.name == "Телевизоры"
     assert len(category2.products) == 1
     assert category2.products[0].name == "55\" QLED 4K"
-
-
