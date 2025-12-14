@@ -17,9 +17,11 @@ def create_categories_from_json(path: str):
     categories = []
     for cat_data in data:
         products = [Product(**p) for p in cat_data['products']]
-        categories.append(Category(cat_data['name'],
-                                 cat_data['description'],
-                                 products))
+        categories.append(Category(
+            cat_data['name'],
+            cat_data['description'],
+            products,
+        ))
     return categories
 
 

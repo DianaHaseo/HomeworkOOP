@@ -19,7 +19,7 @@ def test_category_counters_increment():
     Category.products_count = 0
 
     # Создаем первую категорию с 3 товарами
-    cat1 = Category("Test1", "desc", [
+    Category("Test1", "desc", [
         Product("p1", "", 100, 1),
         Product("p2", "", 100, 1),
         Product("p3", "", 100, 1)
@@ -28,7 +28,7 @@ def test_category_counters_increment():
     assert Category.products_count == 3
 
     # Создаем вторую категорию с 1 товаром
-    cat2 = Category("Test2", "desc", [Product("p4", "", 100, 1)])
+    Category("Test2", "desc", [Product("p4", "", 100, 1)])
     assert Category.category_count == 2
     assert Category.products_count == 4
 
@@ -42,4 +42,4 @@ def test_category1_contents(category1):
 def test_category2_contents(category2):
     assert category2.name == "Телевизоры"
     assert len(category2.products) == 1
-    assert category2.products[0].name == "55\" QLED 4K"
+    assert category2.products[0].name == '55" QLED 4K'
