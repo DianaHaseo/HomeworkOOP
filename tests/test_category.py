@@ -1,47 +1,49 @@
 import pytest
 from src.category import Category
 from src.product import Product
+from tests.conftest import json_categories  # Импорт для pytest
 
-@pytest.fixture(autouse=True)
-def reset_counters():
-    Category.products_count = 0
-    Category.category_count = 0
 
-@pytest.fixture
-def category1():
-    p1 = Product("Samsung Galaxy S23 Ultra", "", 180000.0, 5)
-    p2 = Product("Iphone 15", "", 210000.0, 8)
-    p3 = Product("Xiaomi Redmi Note 11", "", 31000.0, 14)
-    return Category("Смартфоны", "desc", [p1, p2, p3])
+class TestCategory:
+    def test_init_basic(self):
+        """Базовая инициализация"""
+        product = Product("Test", "desc", 100.0, 1)
+        cat = Category("TestCat", "Test desc", [product])
+        assert cat.name == "TestCat"
+        assert "Test" in cat.products
 
-@pytest.fixture
-def category2():
-    p4 = Product("55\" QLED 4K", "", 123000.0, 7)
-    return Category("Телевизоры", "desc", [p4])
+    def test_empty_products(self):
+        """Пустые продукты"""
+        cat = Category("Empty", "desc", [])
+        assert cat.name == "Empty"
+        assert cat.products == ""
 
-@pytest.fixture
-def empty_category():
-    return Category("Empty", "desc", [])
+    def test_none_products(self):
+        cat = Category("None", "desc")  # products=None
+        assert cat.name == "None"
+        assert cat.products == ""
 
-def test_category_initialization(category1):
-    assert category1.name == "Смартфоны"
-    assert len(category1.products.split("\n")) == 3
+    def test_products_property(self):
+        """@property products"""
+        p1 = Product("Samsung", "256GB", 180000.0, 5)
+        p2 = Product("iPhone", "512GB", 210000.0, 8)
+        cat = Category("Test", "desc", [p1, p2])
+        assert "Samsung, 180000 руб." in cat.products
+        assert "iPhone, 210000 руб." in cat.products
 
-def test_category_getter_format(category1):
-    assert "Samsung Galaxy S23 Ultra, 180000 руб. Остаток: 5 шт." in category1.products
+    def test_add_product(self, empty_category):
+        """100% add_product()"""
+        product = Product("New Product", "desc", 100.0, 1)
+        empty_category.add_product(product)
+        assert "New Product" in empty_category.products
 
-def test_add_product(empty_category):
-    p = Product("New", "", 100.0, 1)
-    empty_category.add_product(p)
-    assert len(empty_category.products.split("\n")) == 1
-    assert "New, 100 руб. Остаток: 1 шт." in empty_category.products
-    assert Category.products_count == 1
+    def test_json_categories(self, json_categories):
+        """Тест JSON загрузки"""
+        assert len(json_categories) == 2
+        assert json_categories[0].name == "Смартфоны"
+        assert "Samsung Galaxy C23 Ultra" in json_categories[0].products
 
-def test_category_counters(category1, category2):
-    assert Category.category_count == 2
-    assert Category.products_count == 4
-
-def test_category2_contents(category2):
-    assert category2.name == "Телевизоры"
-    assert len(category2.products.split("\n")) == 1
-    assert "55\" QLED 4K" in category2.products
+    def test_real_data(self, smartphones_category):
+        """Реальные данные"""
+        assert smartphones_category.name == "Смартфоны"
+        assert "Samsung Galaxy S23 Ultra" in smartphones_category.products

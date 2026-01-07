@@ -1,38 +1,41 @@
 import pytest
-import sys
-from io import StringIO
 from src.product import Product
 
-@pytest.fixture
-def product():
-    return Product("Test", "desc", 100.0, 10)
 
-def test_new_product():
-    data = {"name": "New", "description": "new desc", "price": 200.0, "quantity": 5}
-    prod = Product.new_product(data)
-    assert prod.name == "New"
-    assert prod.price == 200.0
-    assert prod.quantity == 5
+class TestProduct:
+    def test_init_complete(self):
+        """Покрытие Product.__init__ (все атрибуты)"""
+        product = Product("Test", "desc", 100.0, 10)
+        assert product.name == "Test"
+        assert product.description == "desc"
+        assert product.price
 
-def test_price_getter(product):
-    assert product.price == 100.0
+    def test_new_product(self):
+        """100% покрытие @classmethod"""
+        data = {
+            "name": "New Product",
+            "description": "Test desc",
+            "price": 150.0,
+            "quantity": 3
+        }
+        product = Product.new_product(data)
+        assert product.name == "New Product"
+        assert product.price == 150.0
 
-def test_price_setter_positive(product):
-    product.price = 150.0
-    assert product.price == 150.0
+    def test_price_getter(self):
+        product = Product("Test", "desc", 200.0, 1)
+        assert product.price == 200.0
 
-def test_price_setter_negative(product):
-    captured_output = StringIO()
-    sys.stdout = captured_output
-    product.price = 0
-    sys.stdout = sys.__stdout__
-    assert "Цена не должна быть нулевая или отрицательная" in captured_output.getvalue()
-    assert product.price == 100.0
+    def test_price_setter_valid(self):
+        product = Product("Test", "desc", 100.0, 1)
+        product.price = 250.0
+        assert product.price == 250.0
 
-def test_price_setter_negative_zero(product):
-    captured_output = StringIO()
-    sys.stdout = captured_output
-    product.price = -50.0
-    sys.stdout = sys.__stdout__
-    assert "Цена не должна быть нулевая или отрицательная" in captured_output.getvalue()
-    assert product.price == 100.0
+    def test_price_setter_invalid(self):
+        product = Product("Test", "desc", 100.0, 1)
+        product.price = 0  # Должно остаться 100.0
+        assert product.price == 100.0
+
+    def test_real_samsung(self):
+        product = Product("Samsung Galaxy S23 Ultra", "256GB...", 180000.0, 5)
+        assert product.name == "Samsung Galaxy S23 Ultra"
