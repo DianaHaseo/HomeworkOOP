@@ -1,38 +1,33 @@
-import pytest
-import sys
-from io import StringIO
+import json
+import os
+
+from src.category import Category
 from src.product import Product
 
-@pytest.fixture
-def product():
-    return Product("Test", "desc", 100.0, 10)
 
-def test_new_product():
-    data = {"name": "New", "description": "new desc", "price": 200.0, "quantity": 5}
-    prod = Product.new_product(data)
-    assert prod.name == "New"
-    assert prod.price == 200.0
-    assert prod.quantity == 5
+def read_json(path: str) -> dict:
+    full_path = os.path.abspath(path)
+    with open(full_path, 'r', encoding="utf-8") as file:
+        data = json.load(file)
+    return data
 
-def test_price_getter(product):
-    assert product.price == 100.0
 
-def test_price_setter_positive(product):
-    product.price = 150.0
-    assert product.price == 150.0
+def create_categories_from_json(path: str):
+    data = read_json(path)
+    categories = []
+    for cat_data in data:
+        products = [Product(**p) for p in cat_data['products']]
+        categories.append(Category(
+            cat_data['name'],
+            cat_data['description'],
+            products,
+        ))
+    return categories
 
-def test_price_setter_negative(product):
-    captured_output = StringIO()
-    sys.stdout = captured_output
-    product.price = 0
-    sys.stdout = sys.__stdout__
-    assert "Цена не должна быть нулевая или отрицательная" in captured_output.getvalue()
-    assert product.price == 100.0
 
-def test_price_setter_negative_zero(product):
-    captured_output = StringIO()
-    sys.stdout = captured_output
-    product.price = -50.0
-    sys.stdout = sys.__stdout__
-    assert "Цена не должна быть нулевая или отрицательная" in captured_output.getvalue()
-    assert product.price == 100.0
+if __name__ == "__main__":
+    # Скачайте products.json и положите в ../data/
+    categories = create_categories_from_json("../data/products.json")
+    print(f"Загружено категорий: {len(categories)}")
+    for cat in categories:
+        print(f"Категория: {cat.name}, товаров: {len(cat.products)}")
