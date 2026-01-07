@@ -11,7 +11,21 @@ class Product:
         self.quantity = quantity
 
     @classmethod
-    def new_product(cls, data: dict):
+    def new_product(cls, data: dict, products_list=None):
+        """✅ Задание 3 + ДОПОЛНИТЕЛЬНОЕ: проверка дубликатов"""
+        name = data["name"]
+
+        # Проверка дубликатов
+        if products_list:
+            for existing in products_list:
+                if existing.name == name:
+                    # Берем максимальную цену + суммируем quantity
+                    new_price = max(existing.price, data["price"])
+                    existing.quantity += data["quantity"]
+                    existing.price = new_price  # Вызывает setter
+                    return existing
+
+        # Новый продукт
         return cls(
             data["name"],
             data["description"],
@@ -25,26 +39,16 @@ class Product:
 
     @price.setter
     def price(self, new_price: float):
+        """✅ Задание 4 + ДОПОЛНИТЕЛЬНОЕ: подтверждение при понижении"""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
             return
+
+        # ✅ ДОПОЛНИТЕЛЬНОЕ: подтверждение при понижении
+        if new_price < self.__price:
+            confirm = input("Цена понижается. Подтвердить? (y/n): ").lower()
+            if confirm != 'y':
+                print("Изменение цены отменено")
+                return
+
         self.__price = new_price
-
-if __name__ == "__main__":
-    products1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
-    print(products1.name)
-    print(products1.description)
-    print(products1.price)
-    print(products1.quantity)
-
-    new_product = Product.new_product({
-        "name": "Samsung Galaxy S23 Ultra",
-        "description": "256GB, Серый цвет, 200MP камера",
-        "price": 180000.0,
-        "quantity": 5
-    })
-    print(new_product.name)
-    print(new_product.price)
-
-    products1.price = 0
-    print(products1.price)
