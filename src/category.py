@@ -1,4 +1,4 @@
-from src.product import Product  # Fixed import path
+from src.product import Product
 
 class Category:
     name: str
@@ -12,9 +12,6 @@ class Category:
         self.__products = products or []  # ✅ Задание 1: приватный
         Category.products_count += len(self.__products)
         Category.category_count += 1
-
-    def __str__(self):
-        return f"{self.name}, количество продуктов: {Category.products_count} шт."
 
     def add_product(self, product: Product):  # ✅ Задание 1
         self.__products.append(product)
