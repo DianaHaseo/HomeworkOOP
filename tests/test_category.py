@@ -1,7 +1,7 @@
 import pytest
 from src.category import Category
 from src.product import Product
-from tests.conftest import json_categories
+from tests.conftest import json_categories, smartphones_category
 
 
 class TestCategory:
@@ -30,13 +30,17 @@ class TestCategory:
         assert "P1" in cat.products
         assert "P2" in cat.products
 
+    def test_str(self):
+        cat = Category("Test", "desc", [])
+        assert "Test, количество продуктов: 0 шт." in str(cat)
+
     def test_class_counters_add_product(self):
         """add_product + счетчик"""
         cat = Category("Test", "desc", [])
         product = Product("New", "desc", 100.0, 1)
         cat.add_product(product)
         assert Category.products_count == 1
-        assert len(cat.products.split("\n")) == 1
+        assert "New" in cat.products
 
     def test_empty_products(self):
         """Пустой список"""

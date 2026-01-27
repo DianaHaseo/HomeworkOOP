@@ -10,6 +10,14 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self):
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        if isinstance(other, Product):
+            return (self.__price * self.quantity) + (other.__price * other.quantity)
+        return NotImplemented
+
     @classmethod
     def new_product(cls, data: dict, products_list=None):
         """✅ Задание 3 + ДОПОЛНИТЕЛЬНОЕ: проверка дубликатов"""

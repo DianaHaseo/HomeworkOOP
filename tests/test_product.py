@@ -6,8 +6,18 @@ class TestProduct:
     def test_init_complete(self):
         product = Product("Test", "desc", 100.0, 10)
         assert product.name == "Test"
+        assert product.description == "desc"
         assert product.price == 100.0
         assert product.quantity == 10
+
+    def test_str(self):
+        product = Product("Test", "desc", 100.0, 10)
+        assert str(product) == "Test, 100.0 руб. Остаток: 10 шт."
+
+    def test_add(self):
+        p1 = Product("A", "d", 100.0, 2)
+        p2 = Product("B", "d", 50.0, 3)
+        assert p1 + p2 == 350.0  # (100*2) + (50*3)
 
     def test_new_product_simple(self):
         """Задание 3: базовый класс-метод"""
@@ -40,19 +50,18 @@ class TestProduct:
         assert "Цена не должна быть" in captured.out
         assert product.price == 100.0
 
-    def test_price_setter_price_decrease(self, capfd):
+    def test_price_setter_price_decrease(self, monkeypatch):
         """✅ ДОПОЛНИТЕЛЬНОЕ Задание 4: понижение цены"""
         product = Product("Test", "desc", 100.0, 1)
-        # Симулируем input('y')
-        with pytest.MonkeyPatch().context() as m:
-            m.setattr("builtins.input", lambda _: "y")
-            product.price = 80.0
+        monkeypatch.setattr("builtins.input", lambda _: "y")
+        product.price = 80.0
         assert product.price == 80.0
 
-    def test_price_setter_decrease_cancel(self, capfd):
+    def test_price_setter_decrease_cancel(self, monkeypatch, capfd):
         """✅ ДОПОЛНИТЕЛЬНОЕ: отмена понижения"""
         product = Product("Test", "desc", 100.0, 1)
-        with pytest.MonkeyPatch().context() as m:
-            m.setattr("builtins.input", lambda _: "n")
-            product.price = 80.0
+        monkeypatch.setattr("builtins.input", lambda _: "n")
+        product.price = 80.0
+        captured = capfd.readouterr()
+        assert "Изменение цены отменено" in captured.out
         assert product.price == 100.0  # Не изменилась
