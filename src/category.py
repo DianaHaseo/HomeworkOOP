@@ -1,4 +1,22 @@
-from src.product import Product  # Fixed import path
+from src.product import Product
+
+
+class CategoryProductsIterator:
+    """✅ Итератор по продуктам категории"""
+    def __init__(self, category):
+        self._category = category  # Сохраняем объект категории
+        self._index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._index >= len(self._category._Category__products):  # Правильный name mangling
+            raise StopIteration
+        product = self._category._Category__products[self._index]
+        self._index += 1
+        return product
+
 
 class Category:
     name: str
@@ -9,22 +27,23 @@ class Category:
     def __init__(self, name, description, products=None):
         self.name = name
         self.description = description
-        self.__products = products or []  # ✅ Задание 1: приватный
+        self.__products = products or []
         Category.products_count += len(self.__products)
         Category.category_count += 1
 
     def __str__(self):
-        return f"{self.name}, количество продуктов: {Category.products_count} шт."
+        total_quantity = sum(p.quantity for p in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
 
-    def add_product(self, product: Product):  # ✅ Задание 1
+    def __iter__(self):
+        return CategoryProductsIterator(self)
+
+    def add_product(self, product: Product):
         self.__products.append(product)
         Category.products_count += 1
 
     @property
-    def products(self):  # ✅ Задание 2: геттер
+    def products(self):
         if not self.__products:
             return ""
-        result = []
-        for p in self.__products:
-            result.append(f"{p.name}, {int(p.price)} руб. Остаток: {p.quantity} шт.")
-        return "\n".join(result)
+        return "\n".join(str(p) for p in self.__products)
