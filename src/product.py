@@ -1,4 +1,5 @@
 class Product:
+    """Базовый класс продукта"""
     name: str
     description: str
     price: float
@@ -14,32 +15,23 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if isinstance(other, Product):
+        """Сложение продуктов - только одинаковые типы"""
+        if type(self) is type(other):
             return (self.__price * self.quantity) + (other.__price * other.quantity)
-        return NotImplemented
+        raise TypeError
 
     @classmethod
     def new_product(cls, data: dict, products_list=None):
-        """✅ Задание 3 + ДОПОЛНИТЕЛЬНОЕ: проверка дубликатов"""
+        """Создание продукта из словаря с проверкой дубликатов"""
         name = data["name"]
-
-        # Проверка дубликатов
         if products_list:
             for existing in products_list:
                 if existing.name == name:
-                    # Берем максимальную цену + суммируем quantity
                     new_price = max(existing.price, data["price"])
                     existing.quantity += data["quantity"]
-                    existing.price = new_price  # Вызывает setter
+                    existing.price = new_price
                     return existing
-
-        # Новый продукт
-        return cls(
-            data["name"],
-            data["description"],
-            data["price"],
-            data["quantity"]
-        )
+        return cls(data["name"], data["description"], data["price"], data["quantity"])
 
     @property
     def price(self):
@@ -47,16 +39,13 @@ class Product:
 
     @price.setter
     def price(self, new_price: float):
-        """✅ Задание 4 + ДОПОЛНИТЕЛЬНОЕ: подтверждение при понижении"""
+        """Установка цены с подтверждением при понижении"""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
             return
-
-        # ✅ ДОПОЛНИТЕЛЬНОЕ: подтверждение при понижении
         if new_price < self.__price:
             confirm = input("Цена понижается. Подтвердить? (y/n): ").lower()
             if confirm != 'y':
                 print("Изменение цены отменено")
                 return
-
         self.__price = new_price

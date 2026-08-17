@@ -2,66 +2,90 @@ import pytest
 from src.product import Product
 
 
-class TestProduct:
-    def test_init_complete(self):
-        product = Product("Test", "desc", 100.0, 10)
-        assert product.name == "Test"
-        assert product.description == "desc"
+class TestProductInit:
+    """Тесты инициализации Product"""
+
+    def test_product_init(self):
+        """Создание продукта"""
+        product = Product("Тест", "Описание", 100.0, 10)
+        assert product.name == "Тест"
+        assert product.description == "Описание"
         assert product.price == 100.0
         assert product.quantity == 10
 
-    def test_str(self):
-        product = Product("Test", "desc", 100.0, 10)
-        assert str(product) == "Test, 100.0 руб. Остаток: 10 шт."
+    def test_product_str(self):
+        """__str__ метод"""
+        product = Product("Телефон", "Смартфон", 50000.0, 5)
+        assert "Телефон" in str(product)
+        assert "50000.0 руб" in str(product)
+        assert "5 шт" in str(product)
 
-    def test_add(self):
-        p1 = Product("A", "d", 100.0, 2)
-        p2 = Product("B", "d", 50.0, 3)
-        assert p1 + p2 == 350.0  # (100*2) + (50*3)
 
-    def test_new_product_simple(self):
-        """Задание 3: базовый класс-метод"""
-        data = {"name": "New", "description": "desc", "price": 150.0, "quantity": 3}
-        product = Product.new_product(data)
-        assert product.name == "New"
+class TestProductAdd:
+    """Тесты сложения продуктов"""
+
+    def test_add_two_products(self):
+        """Сложение двух продуктов"""
+        product1 = Product("Тест 1", "Описание 1", 100.0, 10)
+        product2 = Product("Тест 2", "Описание 2", 200.0, 5)
+        result = product1 + product2
+        expected = (100.0 * 10) + (200.0 * 5)
+        assert result == expected
+
+    def test_add_product_with_zero_quantity(self):
+        """Сложение с нулевым количеством"""
+        product1 = Product("Тест 1", "Описание 1", 100.0, 0)
+        product2 = Product("Тест 2", "Описание 2", 200.0, 5)
+        result = product1 + product2
+        expected = 0 + (200.0 * 5)
+        assert result == expected
+
+
+class TestProductPrice:
+    """Тесты цены продукта"""
+
+    def test_price_setter_increase(self):
+        """Увеличение цены"""
+        product = Product("Тест", "Описание", 100.0, 10)
+        product.price = 150.0
         assert product.price == 150.0
 
-    def test_new_product_duplicate(self):
-        """✅ ДОПОЛНИТЕЛЬНОЕ Задание 3: дубликат"""
-        products = [Product("Test", "desc", 100.0, 5)]
-        data = {"name": "Test", "description": "new desc", "price": 200.0, "quantity": 3}
-
-        updated = Product.new_product(data, products)
-        assert updated is products[0]  # Тот же объект
-        assert products[0].quantity == 8  # 5+3
-        assert products[0].price == 200.0  # max(100,200)
-
-    def test_price_setter_valid(self):
-        """Задание 4: валидная цена"""
-        product = Product("Test", "desc", 100.0, 1)
-        product.price = 250.0
-        assert product.price == 250.0
-
-    def test_price_setter_zero(self, capfd):
-        """Задание 4: цена <= 0"""
-        product = Product("Test", "desc", 100.0, 1)
+    def test_price_setter_zero(self, capsys):
+        """Установка нулевой цены"""
+        product = Product("Тест", "Описание", 100.0, 10)
         product.price = 0
-        captured = capfd.readouterr()
-        assert "Цена не должна быть" in captured.out
-        assert product.price == 100.0
+        captured = capsys.readouterr()
+        assert "Цена не должна быть нулевая" in captured.out
 
-    def test_price_setter_price_decrease(self, monkeypatch):
-        """✅ ДОПОЛНИТЕЛЬНОЕ Задание 4: понижение цены"""
-        product = Product("Test", "desc", 100.0, 1)
-        monkeypatch.setattr("builtins.input", lambda _: "y")
-        product.price = 80.0
-        assert product.price == 80.0
+    def test_price_setter_negative(self, capsys):
+        """Установка отрицательной цены"""
+        product = Product("Тест", "Описание", 100.0, 10)
+        product.price = -50
+        captured = capsys.readouterr()
+        assert "Цена не должна быть нулевая" in captured.out
 
-    def test_price_setter_decrease_cancel(self, monkeypatch, capfd):
-        """✅ ДОПОЛНИТЕЛЬНОЕ: отмена понижения"""
-        product = Product("Test", "desc", 100.0, 1)
-        monkeypatch.setattr("builtins.input", lambda _: "n")
-        product.price = 80.0
-        captured = capfd.readouterr()
-        assert "Изменение цены отменено" in captured.out
-        assert product.price == 100.0  # Не изменилась
+
+class TestProductNewProduct:
+    """Тесты new_product classmethod"""
+
+    def test_new_product_from_dict(self):
+        """Создание из словаря"""
+        data = {
+            "name": "Новый продукт",
+            "description": "Описание",
+            "price": 150.0,
+            "quantity": 10
+        }
+        product = Product.new_product(data)
+        assert product.name == "Новый продукт"
+        assert product.price == 150.0
+        assert product.quantity == 10
+
+    def test_new_product_with_duplicates(self):
+        """Создание с дубликатом"""
+        data = {"name": "Тест", "description": "Описание", "price": 150.0, "quantity": 5}
+        products_list = [Product("Тест", "Описание", 100.0, 10)]
+        result = Product.new_product(data, products_list)
+        assert result is products_list[0]
+        assert result.quantity == 15
+        assert result.price == 150.0

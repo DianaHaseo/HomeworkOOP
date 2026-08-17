@@ -3,6 +3,43 @@ import os
 import pytest
 from src.category import Category
 from src.product import Product
+from src.smartphone import Smartphone
+from src.lawngrass import Lawngrass
+
+
+@pytest.fixture
+def sample_product():
+    """Базовый продукт для тестов"""
+    return Product("Тестовый продукт", "Описание", 100.0, 10)
+
+
+@pytest.fixture
+def sample_smartphone():
+    """Смартфон для тестов"""
+    return Smartphone(
+        "Samsung Galaxy S23",
+        "256GB, Серый",
+        180000.0,
+        5,
+        95.5,
+        "S23",
+        256,
+        "Серый"
+    )
+
+
+@pytest.fixture
+def sample_lawngrass():
+    """Газонная трава для тестов"""
+    return Lawngrass(
+        "Газонная трава",
+        "Элитная трава",
+        500.0,
+        20,
+        "Россия",
+        "7 дней",
+        "Зеленый"
+    )
 
 
 @pytest.fixture
@@ -24,7 +61,7 @@ def json_categories():
 
 @pytest.fixture
 def smartphones_category():
-    """Фикстура для смартфонов"""
+    """Категория со смартфонами"""
     return Category(
         "Смартфоны",
         "Смартфоны описание",
@@ -38,7 +75,7 @@ def smartphones_category():
 
 @pytest.fixture
 def tv_category():
-    """Фикстура для телевизоров"""
+    """Категория с телевизорами"""
     return Category(
         "Телевизоры",
         "ТВ описание",
@@ -48,5 +85,5 @@ def tv_category():
 
 @pytest.fixture
 def empty_category():
-    """Пустая категория для add_product"""
+    """Пустая категория для тестов add_product"""
     return Category("Пустая", "desc", [])
