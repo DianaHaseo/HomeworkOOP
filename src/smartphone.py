@@ -1,10 +1,8 @@
-def _get_product():
-    from src.product import Product
-    return Product
+from src.product import Product
 
 
-class Smartphone(_get_product()):
-    """Смартфон - наследник Product"""
+class Smartphone(Product):
+    """Смартфон — наследник Product."""
 
     def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
         super().__init__(name, description, price, quantity)

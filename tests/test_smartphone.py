@@ -1,13 +1,14 @@
 import pytest
+
 from src.product import Product
 from src.smartphone import Smartphone
 
 
 class TestSmartphoneInit:
-    """Тесты инициализации Smartphone"""
+    """Тесты инициализации Smartphone."""
 
     def test_smartphone_init(self):
-        """Создание смартфона"""
+        """Создание смартфона."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -18,12 +19,13 @@ class TestSmartphoneInit:
             256,
             "Серый"
         )
+
         assert smartphone.name == "Samsung Galaxy S23"
         assert smartphone.price == 180000.0
         assert smartphone.quantity == 5
 
     def test_smartphone_additional_attributes(self):
-        """Дополнительные атрибуты"""
+        """Дополнительные атрибуты."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -34,6 +36,7 @@ class TestSmartphoneInit:
             256,
             "Серый"
         )
+
         assert smartphone.efficiency == 95.5
         assert smartphone.model == "S23"
         assert smartphone.memory == 256
@@ -41,10 +44,10 @@ class TestSmartphoneInit:
 
 
 class TestSmartphoneInheritance:
-    """Тесты наследования"""
+    """Тесты наследования."""
 
     def test_smartphone_is_product(self):
-        """Smartphone наследует Product"""
+        """Smartphone наследует Product."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -55,10 +58,11 @@ class TestSmartphoneInheritance:
             256,
             "Серый"
         )
+
         assert isinstance(smartphone, Product)
 
     def test_smartphone_has_product_attributes(self):
-        """Атрибуты Product доступны"""
+        """Атрибуты Product доступны."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -69,17 +73,22 @@ class TestSmartphoneInheritance:
             256,
             "Серый"
         )
-        assert hasattr(smartphone, 'name')
-        assert hasattr(smartphone, 'description')
-        assert hasattr(smartphone, 'price')
-        assert hasattr(smartphone, 'quantity')
+
+        assert hasattr(smartphone, "name")
+        assert hasattr(smartphone, "description")
+        assert hasattr(smartphone, "price")
+        assert hasattr(smartphone, "quantity")
+
+    def test_smartphone_inherits_only_from_product(self):
+        """Smartphone непосредственно наследует Product."""
+        assert Smartphone.__bases__ == (Product,)
 
 
 class TestSmartphoneStr:
-    """Тесты __str__"""
+    """Тесты __str__."""
 
     def test_smartphone_str(self):
-        """__str__ метод"""
+        """__str__."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -90,15 +99,16 @@ class TestSmartphoneStr:
             256,
             "Серый"
         )
+
         assert "Samsung Galaxy S23" in str(smartphone)
         assert "180000.0 руб" in str(smartphone)
 
 
 class TestSmartphoneAdd:
-    """Тесты сложения"""
+    """Тесты сложения."""
 
     def test_add_two_smartphones(self):
-        """Сложение двух смартфонов"""
+        """Сложение двух смартфонов."""
         smartphone1 = Smartphone(
             "Samsung Galaxy S23",
             "256GB",
@@ -109,6 +119,7 @@ class TestSmartphoneAdd:
             256,
             "Серый"
         )
+
         smartphone2 = Smartphone(
             "Iphone 15",
             "512GB",
@@ -119,12 +130,20 @@ class TestSmartphoneAdd:
             512,
             "Gray"
         )
+
         result = smartphone1 + smartphone2
-        expected = (180000.0 * 5) + (210000.0 * 8)
+
+        expected = (
+            (180000.0 * 5)
+            + (210000.0 * 8)
+        )
+
         assert result == expected
 
-    def test_add_smartphone_and_product_raises(self):
-        """Сложение смартфона и Product вызывает TypeError"""
+    def test_add_smartphone_and_product_raises(
+        self
+    ):
+        """Сложение Smartphone и Product вызывает TypeError."""
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB",
@@ -135,6 +154,13 @@ class TestSmartphoneAdd:
             256,
             "Серый"
         )
-        product = Product("Тест", "Описание", 100.0, 10)
+
+        product = Product(
+            "Тест",
+            "Описание",
+            100.0,
+            10
+        )
+
         with pytest.raises(TypeError):
             smartphone + product

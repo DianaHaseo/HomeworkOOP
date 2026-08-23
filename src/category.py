@@ -1,10 +1,8 @@
 from src.product import Product
-from src.smartphone import Smartphone  # noqa: F401
-from src.lawngrass import Lawngrass as LawnGrass  # noqa: F401
 
 
 class CategoryProductsIterator:
-    """Итератор по продуктам категории"""
+    """Итератор по продуктам категории."""
 
     def __init__(self, category):
         self._category = category
@@ -14,22 +12,20 @@ class CategoryProductsIterator:
         return self
 
     def __next__(self):
-        if self._index >= len(self._category._Category__products):
-            raise StopIteration
-        product = self._category._Category__products[self._index]
-        self._index += 1
-        return product
+        products = self._category._Category__products
 
-    def __add__(self, other):
-        if type(self) is type(other):
-            return CategoryProductsIterator(self._category + other._category)
-        raise TypeError
+        if self._index >= len(products):
+            raise StopIteration
+
+        product = products[self._index]
+        self._index += 1
+
+        return product
 
 
 class Category:
-    """Категория продуктов"""
-    name: str
-    description: str
+    """Категория продуктов."""
+
     products_count = 0
     category_count = 0
 
@@ -37,18 +33,26 @@ class Category:
         self.name = name
         self.description = description
         self.__products = products or []
+
         Category.products_count += len(self.__products)
         Category.category_count += 1
 
     def __str__(self):
-        total_quantity = sum(p.quantity for p in self.__products)
-        return f"{self.name}, количество продуктов: {total_quantity} шт."
+        total_quantity = sum(
+            product.quantity
+            for product in self.__products
+        )
+
+        return (
+            f"{self.name}, "
+            f"количество продуктов: {total_quantity} шт."
+        )
 
     def __iter__(self):
         return CategoryProductsIterator(self)
 
     def add_product(self, product):
-        """Добавление продукта в категорию с проверкой типа"""
+        """Добавляет продукт в категорию."""
         if isinstance(product, Product):
             self.__products.append(product)
             Category.products_count += 1
@@ -59,7 +63,11 @@ class Category:
     def products(self):
         if not self.__products:
             return ""
-        return "\n".join(str(p) for p in self.__products)
+
+        return "\n".join(
+            str(product)
+            for product in self.__products
+        )
 
     @classmethod
     @property
