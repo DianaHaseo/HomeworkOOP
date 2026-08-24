@@ -1,3 +1,5 @@
+import pytest
+
 from src.baseproduct import BaseProduct
 from src.product import Product
 from src.smartphone import Smartphone
@@ -9,8 +11,19 @@ def test_base_product_is_abstract():
     assert BaseProduct.__abstractmethods__
 
 
+def test_base_product_cannot_be_created():
+    """Нельзя создать экземпляр абстрактного класса."""
+    with pytest.raises(TypeError):
+        BaseProduct(
+            "Тест",
+            "Описание",
+            100.0,
+            10
+        )
+
+
 def test_product_inherits_base_product():
-    """Product наследует BaseProduct."""
+    """Product наследуется от BaseProduct."""
     assert issubclass(Product, BaseProduct)
 
 
@@ -19,7 +32,7 @@ def test_product_is_instance_of_base_product():
     product = Product(
         "Тест",
         "Описание",
-        100,
+        100.0,
         10
     )
 
@@ -27,10 +40,10 @@ def test_product_is_instance_of_base_product():
 
 
 def test_smartphone_inherits_only_product():
-    """Smartphone напрямую наследует только Product."""
+    """Smartphone напрямую наследуется только от Product."""
     assert Smartphone.__bases__ == (Product,)
 
 
 def test_lawngrass_inherits_only_product():
-    """Lawngrass напрямую наследует только Product."""
+    """Lawngrass напрямую наследуется только от Product."""
     assert Lawngrass.__bases__ == (Product,)
