@@ -164,3 +164,47 @@ class TestSmartphoneAdd:
 
         with pytest.raises(TypeError):
             smartphone + product
+
+class TestSmartphoneNewFunctionality:
+    """Тесты новой функциональности Smartphone."""
+
+    def test_smartphone_repr(self):
+        """Smartphone использует __repr__ миксина."""
+        smartphone = Smartphone(
+            "Samsung Galaxy S23",
+            "256GB, Серый",
+            180000.0,
+            5,
+            95.5,
+            "S23",
+            256,
+            "Серый"
+        )
+
+        assert repr(smartphone).startswith(
+            "Smartphone("
+        )
+
+    def test_smartphone_mixin_prints_creation_info(
+        self,
+        capsys
+    ):
+        """Миксин выводит информацию при создании Smartphone."""
+        Smartphone(
+            "Samsung Galaxy S23",
+            "256GB, Серый",
+            180000.0,
+            5,
+            95.5,
+            "S23",
+            256,
+            "Серый"
+        )
+
+        captured = capsys.readouterr()
+
+        assert "Smartphone" in captured.out
+        assert "Samsung Galaxy S23" in captured.out
+        assert "256GB, Серый" in captured.out
+        assert "180000.0" in captured.out
+        assert "5" in captured.out

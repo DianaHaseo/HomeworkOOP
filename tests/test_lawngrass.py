@@ -153,3 +153,45 @@ class TestLawngrassAdd:
 
         with pytest.raises(TypeError):
             lawngrass + product
+
+class TestLawngrassNewFunctionality:
+    """Тесты новой функциональности Lawngrass."""
+
+    def test_lawngrass_repr(self):
+        """Lawngrass использует __repr__ миксина."""
+        lawngrass = Lawngrass(
+            "Газонная трава",
+            "Элитная трава",
+            500.0,
+            20,
+            "Россия",
+            "7 дней",
+            "Зеленый"
+        )
+
+        assert repr(lawngrass).startswith(
+            "Lawngrass("
+        )
+
+    def test_lawngrass_mixin_prints_creation_info(
+        self,
+        capsys
+    ):
+        """Миксин выводит информацию при создании Lawngrass."""
+        Lawngrass(
+            "Газонная трава",
+            "Элитная трава",
+            500.0,
+            20,
+            "Россия",
+            "7 дней",
+            "Зеленый"
+        )
+
+        captured = capsys.readouterr()
+
+        assert "Lawngrass" in captured.out
+        assert "Газонная трава" in captured.out
+        assert "Элитная трава" in captured.out
+        assert "500.0" in captured.out
+        assert "20" in captured.out
