@@ -171,5 +171,3 @@ class TestProductNewProduct:
         assert result is products_list[0]
         assert result.quantity == 15
         assert result.price == 150.0
-
-"""Тесты функциональности миксина ProductMixin."""
