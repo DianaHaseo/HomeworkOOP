@@ -5,6 +5,7 @@ from src.lawngrass import Lawngrass
 
 def test_product_mixin_prints_creation_info(capsys):
     """Миксин выводит информацию при создании Product."""
+
     Product(
         "Продукт1",
         "Описание продукта",
@@ -23,6 +24,7 @@ def test_product_mixin_prints_creation_info(capsys):
 
 def test_product_mixin_prints_smartphone_info(capsys):
     """Миксин работает при создании Smartphone."""
+
     Smartphone(
         "Samsung Galaxy S23",
         "256GB, Серый",
@@ -42,6 +44,7 @@ def test_product_mixin_prints_smartphone_info(capsys):
 
 def test_product_mixin_prints_lawngrass_info(capsys):
     """Миксин работает при создании Lawngrass."""
+
     Lawngrass(
         "Газонная трава",
         "Элитная трава",
@@ -60,6 +63,7 @@ def test_product_mixin_prints_lawngrass_info(capsys):
 
 def test_product_repr():
     """Проверяется __repr__ Product."""
+
     product = Product(
         "Продукт1",
         "Описание продукта",
@@ -77,7 +81,8 @@ def test_product_repr():
 
 
 def test_smartphone_repr():
-    """Проверяется наследование __repr__ Smartphone."""
+    """Проверяется __repr__ Smartphone."""
+
     smartphone = Smartphone(
         "Samsung Galaxy S23",
         "256GB, Серый",
@@ -89,11 +94,14 @@ def test_smartphone_repr():
         "Серый"
     )
 
-    assert repr(smartphone).startswith("Smartphone(")
+    assert repr(
+        smartphone
+    ).startswith("Smartphone(")
 
 
 def test_lawngrass_repr():
-    """Проверяется наследование __repr__ Lawngrass."""
+    """Проверяется __repr__ Lawngrass."""
+
     lawngrass = Lawngrass(
         "Газонная трава",
         "Элитная трава",
@@ -104,4 +112,6 @@ def test_lawngrass_repr():
         "Зеленый"
     )
 
-    assert repr(lawngrass).startswith("Lawngrass(")
+    assert repr(
+        lawngrass
+    ).startswith("Lawngrass(")

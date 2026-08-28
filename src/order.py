@@ -1,4 +1,6 @@
 from src.baseentity import BaseEntity
+from src.exceptions import ZeroQuantityError
+
 
 class Order(BaseEntity):
     """Заказ одного товара."""
@@ -12,9 +14,26 @@ class Order(BaseEntity):
     ):
         super().__init__(name, description)
 
-        self.product = product
-        self.quantity = quantity
-        self.total_price = product.price * quantity
+        try:
+            if quantity == 0:
+                raise ZeroQuantityError(
+                    "Товар с нулевым количеством "
+                    "не может быть добавлен в заказ"
+                )
+
+        except ZeroQuantityError as error:
+            print(f"Ошибка: {error}")
+            raise
+
+        else:
+            self.product = product
+            self.quantity = quantity
+            self.total_price = product.price * quantity
+
+            print("Товар успешно добавлен в заказ")
+
+        finally:
+            print("Обработка добавления товара завершена")
 
     def __str__(self):
         return (

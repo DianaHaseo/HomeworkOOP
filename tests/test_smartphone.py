@@ -5,10 +5,10 @@ from src.smartphone import Smartphone
 
 
 class TestSmartphoneInit:
-    """Тесты инициализации Smartphone."""
 
     def test_smartphone_init(self):
         """Создание смартфона."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -26,6 +26,7 @@ class TestSmartphoneInit:
 
     def test_smartphone_additional_attributes(self):
         """Дополнительные атрибуты."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -44,10 +45,10 @@ class TestSmartphoneInit:
 
 
 class TestSmartphoneInheritance:
-    """Тесты наследования."""
 
     def test_smartphone_is_product(self):
         """Smartphone наследует Product."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -59,10 +60,14 @@ class TestSmartphoneInheritance:
             "Серый"
         )
 
-        assert isinstance(smartphone, Product)
+        assert isinstance(
+            smartphone,
+            Product
+        )
 
     def test_smartphone_has_product_attributes(self):
         """Атрибуты Product доступны."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -80,15 +85,16 @@ class TestSmartphoneInheritance:
         assert hasattr(smartphone, "quantity")
 
     def test_smartphone_inherits_only_from_product(self):
-        """Smartphone непосредственно наследует Product."""
+        """Непосредственное наследование."""
+
         assert Smartphone.__bases__ == (Product,)
 
 
 class TestSmartphoneStr:
-    """Тесты __str__."""
 
     def test_smartphone_str(self):
         """__str__."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -105,10 +111,10 @@ class TestSmartphoneStr:
 
 
 class TestSmartphoneAdd:
-    """Тесты сложения."""
 
     def test_add_two_smartphones(self):
         """Сложение двух смартфонов."""
+
         smartphone1 = Smartphone(
             "Samsung Galaxy S23",
             "256GB",
@@ -143,7 +149,8 @@ class TestSmartphoneAdd:
     def test_add_smartphone_and_product_raises(
         self
     ):
-        """Сложение Smartphone и Product вызывает TypeError."""
+        """Smartphone + Product вызывает TypeError."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB",
@@ -165,11 +172,12 @@ class TestSmartphoneAdd:
         with pytest.raises(TypeError):
             smartphone + product
 
+
 class TestSmartphoneNewFunctionality:
-    """Тесты новой функциональности Smartphone."""
 
     def test_smartphone_repr(self):
         """Smartphone использует __repr__ миксина."""
+
         smartphone = Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",
@@ -181,15 +189,16 @@ class TestSmartphoneNewFunctionality:
             "Серый"
         )
 
-        assert repr(smartphone).startswith(
-            "Smartphone("
-        )
+        assert repr(
+            smartphone
+        ).startswith("Smartphone(")
 
     def test_smartphone_mixin_prints_creation_info(
         self,
         capsys
     ):
-        """Миксин выводит информацию при создании Smartphone."""
+        """Миксин выводит информацию."""
+
         Smartphone(
             "Samsung Galaxy S23",
             "256GB, Серый",

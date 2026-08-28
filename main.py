@@ -1,11 +1,31 @@
 from src.product import Product
 from src.category import Category
-from src.smartphone import Smartphone
-from src.lawngrass import Lawngrass
-from src.order import Order
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+
+    # Проверка задания 1
+    try:
+        product_invalid = Product(
+            "Бракованный товар",
+            "Неверное количество",
+            1000.0,
+            0
+        )
+
+    except ValueError as e:
+        print(
+            "Возникла ошибка ValueError: "
+            f"{e}"
+        )
+
+    else:
+        print(
+            "Не возникла ошибка ValueError "
+            "при попытке добавить продукт "
+            "с нулевым количеством"
+        )
+
     product1 = Product(
         "Samsung Galaxy S23 Ultra",
         "256GB, Серый цвет, 200MP камера",
@@ -27,91 +47,22 @@ if __name__ == "__main__":
         14
     )
 
-    print(product1.name)
-    print(product1.description)
-    print(product1.price)
-    print(product1.quantity)
-
-    print(product2.name)
-    print(product2.description)
-    print(product2.price)
-    print(product2.quantity)
-
-    print(product3.name)
-    print(product3.description)
-    print(product3.price)
-    print(product3.quantity)
-
     category1 = Category(
         "Смартфоны",
-        (
-            "Смартфоны, как средство не только "
-            "коммуникации, но и получения дополнительных "
-            "функций для удобства жизни"
-        ),
-        [product1, product2, product3]
+        "Категория смартфонов",
+        [
+            product1,
+            product2,
+            product3
+        ]
     )
 
-    print(category1.name == "Смартфоны")
-    print(category1.description)
-    print(len(category1.products))
-    print(category1.category_count)
-    print(category1.product_count)
+    print(category1.middle_price())
 
-    product4 = Product(
-        '55" QLED 4K',
-        "Фоновая подсветка",
-        123000.0,
-        7
+    category_empty = Category(
+        "Пустая категория",
+        "Категория без продуктов",
+        []
     )
 
-    category2 = Category(
-        "Телевизоры",
-        (
-            "Современный телевизор, который позволяет "
-            "наслаждаться просмотром, станет вашим "
-            "другом и помощником"
-        ),
-        [product4]
-    )
-
-    print(category2.name)
-    print(category2.description)
-    print(len(category2.products))
-    print(category2.products)
-
-    print(Category.category_count)
-    print(Category.product_count)
-
-    smartphone = Smartphone(
-        "Samsung Galaxy S23",
-        "256GB, Серый",
-        180000.0,
-        5,
-        95.5,
-        "S23",
-        256,
-        "Серый"
-    )
-
-    grass = Lawngrass(
-        "Газонная трава",
-        "Элитная трава",
-        500.0,
-        20,
-        "Россия",
-        "7 дней",
-        "Зеленый"
-    )
-
-    print(smartphone)
-    print(grass)
-
-    order = Order(
-        "Заказ №1",
-        "Покупка смартфона",
-        smartphone,
-        2
-    )
-
-    print(order)
+    print(category_empty.middle_price())

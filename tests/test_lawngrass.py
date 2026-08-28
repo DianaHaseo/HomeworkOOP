@@ -5,10 +5,10 @@ from src.lawngrass import Lawngrass
 
 
 class TestLawngrassInit:
-    """Тесты инициализации Lawngrass."""
 
     def test_lawngrass_init(self):
         """Создание газонной травы."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -25,6 +25,7 @@ class TestLawngrassInit:
 
     def test_lawngrass_additional_attributes(self):
         """Дополнительные атрибуты."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -41,10 +42,10 @@ class TestLawngrassInit:
 
 
 class TestLawngrassInheritance:
-    """Тесты наследования."""
 
     def test_lawngrass_is_product(self):
         """Lawngrass наследует Product."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -55,10 +56,14 @@ class TestLawngrassInheritance:
             "Зеленый"
         )
 
-        assert isinstance(lawngrass, Product)
+        assert isinstance(
+            lawngrass,
+            Product
+        )
 
     def test_lawngrass_has_product_attributes(self):
         """Атрибуты Product доступны."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -75,15 +80,16 @@ class TestLawngrassInheritance:
         assert hasattr(lawngrass, "quantity")
 
     def test_lawngrass_inherits_only_from_product(self):
-        """Lawngrass непосредственно наследует Product."""
+        """Непосредственное наследование."""
+
         assert Lawngrass.__bases__ == (Product,)
 
 
 class TestLawngrassStr:
-    """Тесты __str__."""
 
     def test_lawngrass_str(self):
         """__str__."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -99,10 +105,10 @@ class TestLawngrassStr:
 
 
 class TestLawngrassAdd:
-    """Тесты сложения."""
 
     def test_add_two_lawngrass(self):
         """Сложение двух газонных трав."""
+
         grass1 = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -134,6 +140,7 @@ class TestLawngrassAdd:
 
     def test_add_lawngrass_and_product_raises(self):
         """Lawngrass + Product вызывает TypeError."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -154,11 +161,12 @@ class TestLawngrassAdd:
         with pytest.raises(TypeError):
             lawngrass + product
 
+
 class TestLawngrassNewFunctionality:
-    """Тесты новой функциональности Lawngrass."""
 
     def test_lawngrass_repr(self):
         """Lawngrass использует __repr__ миксина."""
+
         lawngrass = Lawngrass(
             "Газонная трава",
             "Элитная трава",
@@ -169,15 +177,16 @@ class TestLawngrassNewFunctionality:
             "Зеленый"
         )
 
-        assert repr(lawngrass).startswith(
-            "Lawngrass("
-        )
+        assert repr(
+            lawngrass
+        ).startswith("Lawngrass(")
 
     def test_lawngrass_mixin_prints_creation_info(
         self,
         capsys
     ):
-        """Миксин выводит информацию при создании Lawngrass."""
+        """Миксин выводит информацию."""
+
         Lawngrass(
             "Газонная трава",
             "Элитная трава",

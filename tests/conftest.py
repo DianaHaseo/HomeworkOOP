@@ -12,6 +12,7 @@ from src.lawngrass import Lawngrass
 @pytest.fixture
 def sample_product():
     """Базовый продукт для тестов."""
+
     return Product(
         "Тестовый продукт",
         "Описание",
@@ -23,6 +24,7 @@ def sample_product():
 @pytest.fixture
 def sample_smartphone():
     """Смартфон для тестов."""
+
     return Smartphone(
         "Samsung Galaxy S23",
         "256GB, Серый",
@@ -38,6 +40,7 @@ def sample_smartphone():
 @pytest.fixture
 def sample_lawngrass():
     """Газонная трава для тестов."""
+
     return Lawngrass(
         "Газонная трава",
         "Элитная трава",
@@ -52,13 +55,16 @@ def sample_lawngrass():
 @pytest.fixture
 def json_categories():
     """Загрузка категорий из products.json."""
+
     path = os.path.join(
         os.path.dirname(__file__),
         "../data/products.json"
     )
 
     if not os.path.exists(path):
-        pytest.skip("products.json не найден в data/")
+        pytest.skip(
+            "products.json не найден в data/"
+        )
 
     with open(path, "r", encoding="utf-8") as file:
         data = json.load(file)
@@ -85,6 +91,7 @@ def json_categories():
 @pytest.fixture
 def smartphones_category():
     """Категория со смартфонами."""
+
     return Category(
         "Смартфоны",
         "Смартфоны описание",
@@ -114,6 +121,7 @@ def smartphones_category():
 @pytest.fixture
 def tv_category():
     """Категория с телевизорами."""
+
     return Category(
         "Телевизоры",
         "ТВ описание",
@@ -131,6 +139,7 @@ def tv_category():
 @pytest.fixture
 def empty_category():
     """Пустая категория."""
+
     return Category(
         "Пустая",
         "desc",

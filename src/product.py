@@ -13,17 +13,21 @@ class Product(ProductMixin, BaseProduct):
 
     def __add__(self, other):
         """Сложение продуктов одного типа."""
+
         if type(self) is type(other):
             return (
                 self.price * self.quantity
                 + other.price * other.quantity
             )
 
-        raise TypeError
+        raise TypeError(
+            "Можно складывать только товары одного типа"
+        )
 
     @classmethod
     def new_product(cls, data: dict, products_list=None):
-        """Создание продукта из словаря с проверкой дубликатов."""
+        """Создание продукта из словаря."""
+
         name = data["name"]
 
         if products_list:
@@ -33,8 +37,10 @@ class Product(ProductMixin, BaseProduct):
                         existing.price,
                         data["price"]
                     )
+
                     existing.quantity += data["quantity"]
                     existing.price = new_price
+
                     return existing
 
         return cls(

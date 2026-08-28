@@ -1,4 +1,5 @@
 from src.product import Product
+from src.exceptions import ZeroQuantityError
 
 
 class CategoryProductsIterator:
@@ -53,11 +54,44 @@ class Category:
 
     def add_product(self, product):
         """Добавляет продукт в категорию."""
-        if isinstance(product, Product):
+
+        try:
+            if not isinstance(product, Product):
+                raise TypeError(
+                    "Можно добавлять только объект Product"
+                )
+
+            if product.quantity == 0:
+                raise ZeroQuantityError(
+                    "Товар с нулевым количеством "
+                    "не может быть добавлен в категорию"
+                )
+
+        except (TypeError, ZeroQuantityError) as error:
+            print(f"Ошибка: {error}")
+            raise
+
+        else:
             self.__products.append(product)
             Category.products_count += 1
-        else:
-            raise TypeError
+            print("Товар успешно добавлен в категорию")
+
+        finally:
+            print("Обработка добавления товара завершена")
+
+    def middle_price(self):
+        """Возвращает среднюю цену товаров категории."""
+
+        try:
+            total_price = sum(
+                product.price
+                for product in self.__products
+            )
+
+            return total_price / len(self.__products)
+
+        except ZeroDivisionError:
+            return 0
 
     @property
     def products(self):

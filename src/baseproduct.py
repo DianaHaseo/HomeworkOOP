@@ -11,6 +11,11 @@ class BaseProduct(ABC):
         price: float,
         quantity: int
     ):
+        if quantity == 0:
+            raise ValueError(
+                "Товар с нулевым количеством не может быть добавлен"
+            )
+
         self.name = name
         self.description = description
         self.__price = price
@@ -35,8 +40,11 @@ class BaseProduct(ABC):
     @price.setter
     def price(self, new_price: float):
         """Устанавливает цену продукта."""
+
         if new_price <= 0:
-            print("Цена не должна быть нулевая или отрицательная")
+            print(
+                "Цена не должна быть нулевая или отрицательная"
+            )
             return
 
         if new_price < self.__price:

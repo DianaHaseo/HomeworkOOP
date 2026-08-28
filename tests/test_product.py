@@ -4,10 +4,10 @@ from src.product import Product
 
 
 class TestProductInit:
-    """Тесты инициализации Product."""
 
     def test_product_init(self):
         """Создание продукта."""
+
         product = Product(
             "Тест",
             "Описание",
@@ -22,6 +22,7 @@ class TestProductInit:
 
     def test_product_str(self):
         """__str__ метод."""
+
         product = Product(
             "Телефон",
             "Смартфон",
@@ -34,11 +35,40 @@ class TestProductInit:
         assert "5 шт" in str(product)
 
 
+class TestProductZeroQuantity:
+    """Тесты новой функциональности."""
+
+    def test_zero_quantity_raises_value_error(self):
+        """Нулевое количество вызывает ValueError."""
+
+        with pytest.raises(ValueError):
+            Product(
+                "Тест",
+                "Описание",
+                100.0,
+                0
+            )
+
+    def test_zero_quantity_error_message(self):
+        """Проверка сообщения ValueError."""
+
+        with pytest.raises(
+            ValueError,
+            match="Товар с нулевым количеством не может быть добавлен"
+        ):
+            Product(
+                "Тест",
+                "Описание",
+                100.0,
+                0
+            )
+
+
 class TestProductAdd:
-    """Тесты сложения продуктов."""
 
     def test_add_two_products(self):
         """Сложение двух продуктов."""
+
         product1 = Product(
             "Тест 1",
             "Описание 1",
@@ -54,37 +84,31 @@ class TestProductAdd:
         )
 
         result = product1 + product2
-        expected = (100.0 * 10) + (200.0 * 5)
+
+        expected = (
+            (100.0 * 10)
+            + (200.0 * 5)
+        )
 
         assert result == expected
 
     def test_add_product_with_zero_quantity(self):
-        """Сложение с нулевым количеством."""
-        product1 = Product(
-            "Тест 1",
-            "Описание 1",
-            100.0,
-            0
-        )
+        """Проверка сложения с нулевым количеством."""
 
-        product2 = Product(
-            "Тест 2",
-            "Описание 2",
-            200.0,
-            5
-        )
-
-        result = product1 + product2
-        expected = 0 + (200.0 * 5)
-
-        assert result == expected
+        with pytest.raises(ValueError):
+            Product(
+                "Тест 1",
+                "Описание 1",
+                100.0,
+                0
+            )
 
 
 class TestProductPrice:
-    """Тесты цены продукта."""
 
     def test_price_setter_increase(self):
         """Увеличение цены."""
+
         product = Product(
             "Тест",
             "Описание",
@@ -96,8 +120,12 @@ class TestProductPrice:
 
         assert product.price == 150.0
 
-    def test_price_setter_zero(self, capsys):
+    def test_price_setter_zero(
+        self,
+        capsys
+    ):
         """Установка нулевой цены."""
+
         product = Product(
             "Тест",
             "Описание",
@@ -109,10 +137,17 @@ class TestProductPrice:
 
         captured = capsys.readouterr()
 
-        assert "Цена не должна быть нулевая" in captured.out
+        assert (
+            "Цена не должна быть нулевая"
+            in captured.out
+        )
 
-    def test_price_setter_negative(self, capsys):
+    def test_price_setter_negative(
+        self,
+        capsys
+    ):
         """Установка отрицательной цены."""
+
         product = Product(
             "Тест",
             "Описание",
@@ -124,14 +159,17 @@ class TestProductPrice:
 
         captured = capsys.readouterr()
 
-        assert "Цена не должна быть нулевая" in captured.out
+        assert (
+            "Цена не должна быть нулевая"
+            in captured.out
+        )
 
 
 class TestProductNewProduct:
-    """Тесты new_product."""
 
     def test_new_product_from_dict(self):
         """Создание из словаря."""
+
         data = {
             "name": "Новый продукт",
             "description": "Описание",
@@ -147,6 +185,7 @@ class TestProductNewProduct:
 
     def test_new_product_with_duplicates(self):
         """Создание с дубликатом."""
+
         data = {
             "name": "Тест",
             "description": "Описание",
